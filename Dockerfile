@@ -11,10 +11,20 @@
 
 # CMD ["ls","-la"]
 
-From ubuntu
+# From ubuntu
 
-ARG message
-#　message.txtがなければ作られる
-RUN echo $message > message.txt
+# ARG message
+# #　message.txtがなければ作られる
+# RUN echo $message > message.txt
 
-CMD ["cat","message.txt"]
+# CMD ["cat","message.txt"]
+
+FROM ubuntu AS base
+RUN apt update
+CMD ["sh","-c","echo Myname is $my_name"]
+
+FROM base AS dev
+ENV my_name=TEST
+
+FROM base AS pro
+ENV my_name=Bob
