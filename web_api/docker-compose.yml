@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  api:
+    build: ./api
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  db:
+    # こっちはドッカーファイルを使わないからimageを指定してdockerhubから取ってくる。使い方はdockerhubに載っている
+    image: postgres:15
+    ports:
+      - 5432;5432
+    environment:
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=appdb
+    volumes:
+      - db-storage:/var/lib/postgresql/data
+      - ./db/initdb:docker-entrypoint-initdb.d
+
+volumes:
+  db-storage:
+# 下記のコマンドと同義
+# docker image build -t api-img ./api
+# docker container run --name api -p 8080:8080 api-img
+#  Network web_api_default  Created   にあるように、ブリッジネットワークもデフォルトで作ってくれる
+

@@ -1,0 +1,13 @@
+・docker composeで複数コンテナを扱う
+とは、一括実行のためのツール
+複数コンテナ管理、ネットワークの紐付け設定、ボリューム設定など多くのドッカーコマンドの実行、その環境の共有は困難
+docker-compose.ymlを使う　docker compose update
+
+WEB APIの作成
+コンテナが消えても良いように、データベースをボリュームに接続
+docker compose exec db bash
+docker comopose downで一気にダウンできる　ボリュームは消えない
+そういえば、いつも使っている時データベースとapi分けているけど違和感なく使えているな
+docker compose up --build これを書かなかったら以前のイメージが再利用され、変更が適用されない
+今回の例でもdockerコマンドを使ったらたくさんのコマンドになる
+けど、それぞれのコマンドとその機能を正しく知っていないとdocker composeは使いこなせない

@@ -205,5 +205,12 @@ docker network ls
 docker network inspect ネットワーク名で詳細を確認できる　入っているコンテナも
 docker network create my-net かなり直感的に作れるdocker container run -itd --rm --name my-nginx-2 --network my-net nginx
 
-ネットワーク内での通信の仕方
+ネットワーク内でのhttp通信の仕方
 一つのイメージをビルドして、それから二つのコンテナを作れる
+curlはhttpリクエストを送るために使う
+
+名前解決
+ipアドレスを直接取得しなくても、コンテナ名でルーティングされる
+起動するたびにIPアドレスは変わるが、名前は変わらない
+正、bridgeネットワークでは使えない
+docker network rm　ネットワーク名　で削除できる
