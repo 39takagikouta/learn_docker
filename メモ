@@ -124,6 +124,16 @@ ARG 変数名=デフォルト値
 image作成時にDockerfileの中で使える変数を作成することが可能
 docker image build --build-arg message="hello message" .
 上記のような形でimage作成時に変数に値を入れることができる
+FROM ubuntu22:04 AS base
+RUN apt update
+CMD ["sh","-c","echo Myname is $my_name"]
+
+FROM base AS dev
+ENV my_name=TEST
+
+FROM base AS pro
+ENV my_name=Bob
+
 
 両者の使い分け
 ARGはイメージ作成時のみ有効であり、ENVはコンテナ上でも使える
@@ -176,3 +186,24 @@ pwdで絶対パスを取れる　$(pwd)/my-dirとかもいける
 ドッカー側ではデータの永続化の際はvolumeを推奨
 ホスト側からデータアクセスが必要でない場合はこっち
 データベースのコンテナでは前者をよく使う　データベースのデータには直接アクセスする必要がないから
+
+・コンテナと接続する
+ホストとコンテナのポートを紐づける
+ポートとは、住所の一つ　IPアドレス（サーバー）とポート番号（サーバー内のアプリ）で構成される
+Nginxはhttpサーバー
+コンテナの中のアプリにアクセスするには、ホストマシンのポートとコンテナのポートを紐づけないといけない
+docker container run -p 3000:80 .
+docker container lsでも紐付けを見れる
+
+dockerネットワーク
+複数立ち上げるのが当たり前　アプリとデータベースで分けたり
+コンテナ同士の通信を簡単にしたり、不要なコンテナ同士の通信を防ぐために隔離する方法
+docker network ls
+何も設定しなかったら、デフォルトのbridgeというネットワークに入る
+複数のコンテナ同士の通信を橋渡しするからbridge
+注意点　bridgeはブリッジネットワークの一種
+docker network inspect ネットワーク名で詳細を確認できる　入っているコンテナも
+docker network create my-net かなり直感的に作れるdocker container run -itd --rm --name my-nginx-2 --network my-net nginx
+
+ネットワーク内での通信の仕方
+一つのイメージをビルドして、それから二つのコンテナを作れる

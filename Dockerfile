@@ -19,12 +19,8 @@
 
 # CMD ["cat","message.txt"]
 
-FROM ubuntu AS base
-RUN apt update
-CMD ["sh","-c","echo Myname is $my_name"]
+FROM ubuntu:22.04
 
-FROM base AS dev
-ENV my_name=TEST
+RUN apt update && apt install -y iputils-ping curl
 
-FROM base AS pro
-ENV my_name=Bob
+CMD ["bash"]
